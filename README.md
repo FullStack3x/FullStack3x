@@ -2,4 +2,32 @@
 - 🌱 I started off studying HTML, CSS and Javascript, eventually getting into GRC taking an ISSO class and going from there. I'm now building my technical knowledge from the ground up, working on building servers and understanding the architecture of a computer from the hardware and software basics, to building a secure linux distro. I'm also working on understanding how to build/maintain a secure security program From GRC Analyst to CISO (Potentially). I love tech, studying all of this is fun, and if it can bring my family a better life as well as contribute something positive to the world, I know I'm doing the right thing. 
 - 📫 Twitter: @ObsidianCyber  IG:@Dee3x Email: Fullstack3x@gmail.com Reddit: u/BBD-333
 
+So my very cool, very bald mentor gave me a project to build a server over the Christmas holiday. I've basically been pressing him to give me things to do since we connected at work - I worked in sales at the time, but I was in customer service before that and one of the responsibilities I had was working the front desk from time to time while my company filled the position. Long story short, I run into one of the nicest ladies I've met so far there, who happens to work on our SAP architecture (I believe). We have some conversation, I let her know I'm studying cybersecurity myself through whatever I could find on the internet, and she introduces me to the Cybersecurity Engineer there. I start learning some more, getting projects and connecting with a straight shooter who knows his stuff and was encouraging me to just jump off the deep end out of the gate. 
+
+I ended up standing up a MISP server, but I didn't quite finish it because my main job in sales was too demanding, and I honestly would be exhausted after talking all day, dealing with fires left and right, trying to maintain my numbers and keep my head on straight as much as possible. Fast forward to now, I work as a pricing analyst and it's almost harder now, but I'm sticking with it and doing everything I can to get some hands on practice - You can learn all you want, but without hands on application you don't get an understanding of the why behind everything. And that brings us to this moment - You reading this repo to come along with me in my journey into building servers in Ubuntu.
+
+I'm running Windows 11 on a Dell Latitude 5410 with 32GB of RAM, a 512GB SSD, and an Intel Core i7-10610U processor.
+
+### Setting up
+
+The first step is getting all of the software we need to run the server - That would be a Virtual Machine (VM) to run another Operating System (OS) on, and Linux Ubuntu OS to run the server on. I could run it on my laptop without the VM, but that would require me to delete Windows and solely run Linux, I just don't feel like doing all of that to be completely honest. That's another project for another day.
+
+**Downloading Ubuntu**
+
+I'm working on Ubuntu 24.04.3 LTS. There is a newer version available right now - Ubuntu 25.10 - the LTS is the most reliable version to have for servers and workstations as it offers stability, security, and 5+ years of updates. The newer versions only offer 9 months of support and require more frequent updates so they're good for trying out the newest features and for people who are comfortable with making updates that frequently, just depends on what your purpose is.
+
+I downloaded it from [here](https://ubuntu.com/download/desktop)
+
+**Downloading the Virtual Machine**
+
+This is where I was running into the most frustration in the beginning, you'll see why soon. So Downloading the VirtualBox is easy enough, getting it to run was a little tricky, I just needed to do a little searching on some forums to find out how to get it going. The thing is, my computer was new - like not even a month old new when I started doing this, so I didn't have Python on my computer yet to be able to make it work. The VirtualBox needs the Python Core & win32api bindings because the VirtualBox has a Python API that allows external Python scripts to manage and automate VMs on Windows hosts. 
+
+I downloaded the newest version of Python [here](https://www.python.org/downloads/) and installed it using the command prompts that showed up in the terminal that popped up at the installation - just a bunch of pressing y > enter. The main thing is making sure you press y when it asks you about if you want to create a PATH for python. This is important so you're able to execute Python commands and run Python scripts from anywhere in the terminal, otherwise they won't work when it's time.
+
+That's important because when it was time to install the bindings on my terminal, I had to use a specific command to get the win32api bindings downloaded for them to be able to be used by the VirtualBox:
+
+py -m pip install --upgrade pip
+
+
+
 
