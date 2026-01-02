@@ -6,11 +6,11 @@ I'm running Windows 11 on a Dell Latitude 5410 with 32GB of RAM, a 512GB SSD, an
 
 ### Setting up
 
-The first step is getting all of the software we need to run the server - That would be a Virtual Machine (VM) to run another Operating System (OS) on, and Linux Ubuntu OS to run the server on. I could run it on my laptop without the VM, but that would require me to delete Windows and solely run Linux, I just don't feel like doing all of that to be completely honest. That's another project for another day.
+The first step is getting all of the software we need to run the server - That would be a Virtual Machine (VM) to run another Operating System (OS) on, and Linux Ubuntu OS to run the server on. I could run it on my laptop without the VM, but that would require me to delete Windows and solely run Linux - IT's not necessary, this situation doesn't exactly call for it, and I just don't feel like doing all of that to be completely honest. That's another project for another day.
 
 **Downloading Ubuntu**
 
-I'm working on Ubuntu 24.04.3 LTS. There is a newer version available right now - Ubuntu 25.10 - the LTS is the most reliable version to have for servers and workstations as it offers stability, security, and 5+ years of updates. The newer versions only offer 9 months of support and require more frequent updates so they're good for trying out the newest features and for people who are comfortable with making updates that frequently, just depends on what your purpose is.
+I'm working on Ubuntu 24.04.3 LTS. There is a newer version available right now - Ubuntu 25.10 - the LTS is the most reliable version to have for servers and workstations as it offers stability, security, and 5+ years of updates. The newer versions only offer 9 months of support and require more frequent updates so they're good for trying out the newest features and for people who are comfortable with making updates that frequently, just depends on what your purpose is. Mine is to build a server and use it for something down the line, I just dont know exactly what it will be yet, I think LTS is good to start since it will be lower maintenance.
 
 I downloaded it from [here](https://ubuntu.com/download/desktop)
 
@@ -24,6 +24,12 @@ That's important because when it was time to install the bindings on my terminal
 
 py -m pip install --upgrade pip
 
+**Creating a Virtual Machine**
 
+So now we're at the point where I have to actually create the VM that Ubuntu is going to run on. The Virtual Machine in itself is a vehicle to run the second OS in without having to swap the base Windows 11 OS I'm using. Think about it as a holster - without one, you can only carry one weapon (Windows 11). When you equip yourself with the holster (Virtual Machine), you can now carry another weapon (Ubuntu) to switch to for a different situation. 
+
+When I select new, It'll ask me to name it - It feels like my first Pokemon so I'm gonna call it Totodile. If you remember Pokemon Gold, it was the water type base you could pick and that was the first one I went all the way with, so I'll sprinkle a little nostalgia in there for me. 
+
+Back to the important stuff: Selecting an ISO Image is key here - An ISO Image is a .iso file - a digital replica of a CD or DVD that serves as an installer. A.K.A. the file that holds the operating system we want to run in the VM.
 
 
