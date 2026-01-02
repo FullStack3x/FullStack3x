@@ -49,12 +49,13 @@ Passwords generally get encrypted with hashing - when you enter your password on
 Allocating base memory, an amount of CPUs and disk size is important because it determines the power of your VM vs the amount of power you leave for the host device. It's good to leave a good amount of base memory in general for the host device so it's not overworking itself and you have space for normal usage. 2-4 GB is a safe place to start so I'm going with 3. 
 
 As Far as CPUs go, similar to the Base Memory, this is how many cores you allocate to the VM vs how many you leave for the host device. For this simple server 2 is okay - one for the OS and one for the overhead. In general, you want to avoid assigning more CPUs than your computer actually has cores. You'll want to take **context switching** into account when doing this - when the CPU schedueler decides to switch from one running process to another. Like if you're running a video and a music player at the same time, your CPU isn't actually doing it at the same time, it's switching processes between those two more times than you can count in a second to keep those running. 
-
+**
 For Disk Size, you want to just make sure you have more disk space on your host device than you do on your VMs total. We'll be running maybe 2 VMs here, so for this first one Im gonna allocate 25GB. I have abbout 477 available and this computer is primarily only used for Cybersecurity, so that should be enough for now.
 
 It'll ask you if you want to confirm after this, hit finish and bow - Totodile has been born. You can also always go back and change these settings in the future if you want/need.
 
 Once you finish here, your VM should boot Ubuntu and open the installation window. It's a bunch of clicking next, naming the distribution, and letting it setup. For this project, we'll need Active Directory so make sure to select that option when it comes up.
 
+**Install Problem: Unattended Installation**
 
-
+I ran into an issue here where Ubuntu just wouldn't install fully, I kept getting error messages. I thought That something went wrong initially because I stopped the install at one point trying to go back and have it connect Active Directory, so I deleted the ISO image and redownloaded it, but I got the error again. Turns out the installer tried to format my virtual hard drive and write the partition table, but it couldn't complete the process. It sounds like this is normally caused by the unattended installation feature in VirtualBox, meaning I had to delete the VM and recreate it without having that selected.
