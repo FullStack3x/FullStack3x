@@ -59,3 +59,29 @@ Once you finish here, your VM should boot Ubuntu and open the installation windo
 **Install Problem: Unattended Installation**
 
 I ran into an issue here where Ubuntu just wouldn't install fully, I kept getting error messages. I thought That something went wrong initially because I stopped the install at one point trying to go back and have it connect Active Directory, so I deleted the ISO image and redownloaded it, but I got the error again. Turns out the installer tried to format my virtual hard drive and write the partition table, but it couldn't complete the process. It sounds like this is normally caused by the unattended installation feature in VirtualBox, meaning I had to delete the VM and recreate it without having that selected.
+
+**Back On Track**
+
+So we got it uninstalled, I added another CPU just in case, but the manual install is going well so far. When setting up the VM, unselecting the Unattended Installation forces Ubuntu to basically have you choose your path instead of using an autoinstaller, which I think is missing and the reason I was running into issues before. This is more hands on and informative anyway, which is the reason I'm even doing this. 
+
+I cheated and used Gemini Pro to help me think through how to get through that and had it breakdown the issue:
+
+_"The log snippet you provided shows the installation failing (or hanging) exactly at the cmd-install/stage-partitioning step. This means the installer tried to format your virtual hard drive and write the partition table, but it couldn't complete the process.
+
+In VirtualBox 7.x with Ubuntu 24.04, this is almost always caused by a feature called "Unattended Installation."_
+
+So, we repeat the steps from earlier and go through with the install. You should have  an ubuntu bootstrap as well, when it asks you to update ubuntu and you should do so. This one is the ubuntu-desktop-bootstrap - basically it uses Linux's installer backend, Subiquity, to push the setup along, and Flutter - A Google open source UI SDK used to create the GUI for Linux. 
+
+The setup will be the same up to the internet connection part - If you're confused, just go with wired connection, Virtual box acts like a wired ethernet cable for the VM so it shows like that. After that, things work a little different, so far so good.
+
+When we get to the Application Setup part, we'll want to choose Interactive Installation. Automatic gives us the same issue as last time - essentially Subuquity not being able to locate the path the necessary _autoinstall.yaml_ file is located within, and breaking the install.
+
+From there it's easy & breezy for a while - Select Install Third Party software for Graphics and Wi-Fi as well as download and install support for additional media formats. This, in addition to the extended selection packages are going to help us mimic an actual user machine that has access to these things - Spreadsheets, word processors, email clients, etc.
+
+Now we erase the disk and install Ubuntu - This just erases what was in the disk space we set aside in VirtualBox when we set the machine up. In this instance, we won't use advanced features - it'll come in handy later, but we'll keep it simple for now.
+
+Name the computer, name the user, give it a password, all that good stuff and we're good here. We'll join the domain after the installation as this is a cybersecurity best practice. Overall it looks like it's just easier as there can be install issues where the installer gets stuck, the DNS isn't configured correctly, etc.
+
+**SUCCESS**
+
+The install went perfect this time and we have a restarted VM with Ubuntu on it. When it asks to delete the installation medium ignore that, it's a carry over from the days of CD-ROMs apparently and is saying to remove the "disc" from the "tray" so it doesn't boot from the installer again, but since we're doing this from the virtyalbox, it should know not to do that, so we'll be fine.
