@@ -4,19 +4,17 @@ I ended up standing up a MISP server, but I didn't quite finish it because my ma
 
 I'm running Windows 11 on a Dell Latitude 5410 with 32GB of RAM, a 512GB SSD, and an Intel Core i7-10610U processor.
 
-### Setting up Member Device
+### Gathering the Materials
 
-The first step is getting all of the software we need to run the MEmber device - That would be a Virtual Machine (VM) to run another Operating System (OS) on, which is going to be Linux Ubuntu. I could run it on my laptop without the VM, but that would require me to delete Windows and solely run Linux - It's not necessary, this situation doesn't exactly call for it, and I just don't feel like doing all of that to be completely honest. That's another project for another day.
+The first step is getting all of the software we need to run both the Member device and the server through - That would be a Virtual Machine (VM) to run another Operating System (OS) on, which is going to be Linux Ubuntu. I could run it on my laptop without the VM, but that would require me to delete Windows and solely run Linux - It's not necessary, this situation doesn't exactly call for it, and I just don't feel like doing all of that to be completely honest. That's another project for another day.
 
-**Downloading Ubuntu**
-
-I'm working on Ubuntu 24.04.3 LTS. There is a newer version available right now - Ubuntu 25.10 - the LTS is the most reliable version to have for servers and workstations as it offers stability, security, and 5+ years of updates. The newer versions only offer 9 months of support and require more frequent updates so they're good for trying out the newest features and for people who are comfortable with making updates that frequently, just depends on what your purpose is. Mine is to build a server and use it for something down the line, I just dont know exactly what it will be yet, I think LTS is good to start since it will be lower maintenance.
-
-I downloaded it from [here](https://ubuntu.com/download/desktop)
+We'll be creating two VMs for this since we'll be simulating one device communicating with another.
 
 **Downloading the Virtual Machine**
 
 This is where I was running into the most frustration in the beginning, you'll see why soon. So Downloading the VirtualBox is easy enough, getting it to run was a little tricky, I just needed to do a little searching on some forums to find out how to get it going. The thing is, my computer was new - like not even a month old new when I started doing this, so I didn't have Python on my computer yet to be able to make it work. The VirtualBox needs the Python Core & win32api bindings because the VirtualBox has a Python API that allows external Python scripts to manage and automate VMs on Windows hosts. 
+
+**Downloading Python**
 
 I downloaded the newest version of Python [here](https://www.python.org/downloads/) and installed it using the command prompts that showed up in the terminal that popped up at the installation - just a bunch of pressing y > enter. The main thing is making sure you press y when it asks you about if you want to create a PATH for python. This is important so you're able to execute Python commands and run Python scripts from anywhere in the terminal, otherwise they won't work when it's time.
 
@@ -24,9 +22,25 @@ That's important because when it was time to install the bindings on my terminal
 
 py -m pip install --upgrade pip
 
+**Sidenote**
+
+**Ubuntu Server** and **Ubuntu Desktop** are 2 completely different downloads, so make sure to pay attention when you're doing the setup.
+
+## Member Device Setup
+
+So now we're at the point where I have to actually create the VM that Ubuntu is going to run on. This distribution is going to be for the member device as the VM setup will be different for each of our devices.
+
+**Downloading Ubuntu**
+
+I'm working on Ubuntu 24.04.3 LTS. There is a newer version available right now - Ubuntu 25.10 - the LTS is the most reliable version to have for servers and workstations as it offers stability, security, and 5+ years of updates. The newer versions only offer 9 months of support and require more frequent updates so they're good for trying out the newest features and for people who are comfortable with making updates that frequently, just depends on what your purpose is. Mine is to build a server and use it for something down the line, I just dont know exactly what it will be yet, I think LTS is good to start since it will be lower maintenance.
+
+I downloaded it from [here](https://ubuntu.com/download/desktop)
+
 **Creating a Virtual Machine**
 
-So now we're at the point where I have to actually create the VM that Ubuntu is going to run on. The Virtual Machine in itself is a vehicle to run the second OS in without having to swap the base Windows 11 OS I'm using. Think about it as a holster - without one, you can only carry one weapon (Windows 11). When you equip yourself with the holster (Virtual Machine), you can now carry another weapon (Ubuntu) to switch to for a different situation. 
+The Virtual Machine in itself is a vehicle to run the second OS in without having to swap the base Windows 11 OS I'm using. Think about it as a holster - without one, you can only carry one weapon (Windows 11). When you equip yourself with the holster (Virtual Machine), you can now carry another weapon (Ubuntu) to switch to for a different situation. Two VMs, 3 total weapons to use.
+
+We're at the point where I have to actually create the VM that Ubuntu is going to run on. The Virtual Machine in itself is a vehicle to run the second OS in without having to swap the base Windows 11 OS I'm using. Think about it as a holster - without one, you can only carry one weapon (Windows 11). When you equip yourself with the holster (Virtual Machine), you can now carry another weapon (Ubuntu) to switch to for a different situation. 
 
 When I select new, It'll ask me to name it - It feels like my first Pokemon so I'm gonna call it Totodile. If you remember Pokemon Gold, it was the water type base you could pick and that was the first one I went all the way with, so I'll sprinkle a little nostalgia in there for me. 
 
@@ -44,15 +58,15 @@ Small lesson on cryptography and how it connects because I think this is super c
 
 Passwords generally get encrypted with hashing - when you enter your password on a website, the actual password you enter isn't stored anywhere, it gets hashed. In short, it's mathematically tuned into an unrecognizable compilation of letters and numbers. the longer the password the more time it takes to hack.
 
-**Back to Regularly Scheduled Programming: Specifying Virtual Hardware**
+**Back to Regularly Scheduled Programming: VM Setup - Specifying Virtual Hardware**
 
-Allocating base memory, an amount of CPUs and disk size is important because it determines the power of your VM vs the amount of power you leave for the host device. It's good to leave a good amount of base memory in general for the host device so it's not overworking itself and you have space for normal usage. 2-4 GB is a safe place to start so I'm going with 3. 
+Allocating base memory, an amount of CPUs and disk size is important because it determines the power of your VM vs the amount of power you leave for the host device. It's good to leave a good amount of base memory in general for the host device so it's not overworking itself and you have space for normal usage. 2-4 GB is a safe place to start so I'm going with 4. 
 
-As Far as CPUs go, similar to the Base Memory, this is how many cores you allocate to the VM vs how many you leave for the host device. For this simple server 2 is okay - one for the OS and one for the overhead. In general, you want to avoid assigning more CPUs than your computer actually has cores. You'll want to take **context switching** into account when doing this - when the CPU schedueler decides to switch from one running process to another. Like if you're running a video and a music player at the same time, your CPU isn't actually doing it at the same time, it's switching processes between those two more times than you can count in a second to keep those running. 
+As Far as CPUs go, similar to the Base Memory, this is how many cores you allocate to the VM vs how many you leave for the host device. For this simple server 3 is okay - one for the OS and two for the overhead. In general, you want to avoid assigning more CPUs than your computer actually has cores. You'll want to take **context switching** into account when doing this - when the CPU schedueler decides to switch from one running process to another. Like if you're running a video and a music player at the same time, your CPU isn't actually doing it at the same time, it's switching processes between those two more times than you can count in a second to keep those running. 
 **
 For Disk Size, you want to just make sure you have more disk space on your host device than you do on your VMs total. We'll be running maybe 2 VMs here, so for this first one Im gonna allocate 25GB. I have abbout 477 available and this computer is primarily only used for Cybersecurity, so that should be enough for now.
 
-It'll ask you if you want to confirm after this, hit finish and bow - Totodile has been born. You can also always go back and change these settings in the future if you want/need.
+It'll ask you if you want to confirm after this, hit finish and **bow** - Totodile has been born. You can also always go back and change these settings in the future if you want/need.
 
 Once you finish here, your VM should boot Ubuntu and open the installation window. It's a bunch of clicking next, naming the distribution, and letting it setup. For this project, we'll need Active Directory so make sure to select that option when it comes up.
 
@@ -60,7 +74,7 @@ Once you finish here, your VM should boot Ubuntu and open the installation windo
 
 I ran into an issue here where Ubuntu just wouldn't install fully, I kept getting error messages. I thought That something went wrong initially because I stopped the install at one point trying to go back and have it connect Active Directory, so I deleted the ISO image and redownloaded it, but I got the error again. Turns out the installer tried to format my virtual hard drive and write the partition table, but it couldn't complete the process. It sounds like this is normally caused by the unattended installation feature in VirtualBox, meaning I had to delete the VM and recreate it without having that selected.
 
-**Back On Track**
+**Back On Track - Finish installing Member Device**
 
 So we got it uninstalled, I added another CPU just in case, but the manual install is going well so far. When setting up the VM, unselecting the Unattended Installation forces Ubuntu to basically have you choose your path instead of using an autoinstaller, which I think is missing and the reason I was running into issues before. This is more hands on and informative anyway, which is the reason I'm even doing this. 
 
@@ -71,6 +85,8 @@ _"The log snippet you provided shows the installation failing (or hanging) exact
 In VirtualBox 7.x with Ubuntu 24.04, this is almost always caused by a feature called "Unattended Installation."_
 
 So, we repeat the steps from earlier and go through with the install. You should have  an ubuntu bootstrap as well, when it asks you to update ubuntu and you should do so. This one is the ubuntu-desktop-bootstrap - basically it uses Linux's installer backend, Subiquity, to push the setup along, and Flutter - A Google open source UI SDK used to create the GUI for Linux. 
+
+The Ubuntu bootstrap is what's going to make this the member device, since it needs the GUI. The Server VM is going to be completely run from the Terminal, but we'll get into that later.
 
 The setup will be the same up to the internet connection part - If you're confused, just go with wired connection, Virtual box acts like a wired ethernet cable for the VM so it shows like that. After that, things work a little different, so far so good.
 
@@ -223,4 +239,19 @@ The --classic flag tells Ubuntu: "Burst the security bubble for this one app. Le
 
 The download should start running from the terminal there, a few minutes later you should have VSCode in that VM.
 
-We've added apps by the GUI and the Terminal now, and our member 
+We've added apps by the GUI and the Terminal now, and our member device is set. Time to move on to the Server VM.
+
+
+## Server Device Setup
+
+Time to get the server stood up - This is going to be a little different since our server hardware/software needs aren't the same.
+
+**Downloading Ubuntu**
+
+If we want a slow, bloated server, we continue with the .iso we used in the member server. Nobody ever wants that, so we're going to grab a different version of Ubuntu for it. 
+
+I downloaded Ubuntu Server [here](https://ubuntu.com/download/server)
+
+This version comes without the GUI installed - Saving RAM - and is pre-installed with server Grade Kernels.
+
+**Creating A Virtual Machine**
