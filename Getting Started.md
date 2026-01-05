@@ -4,9 +4,9 @@ I ended up standing up a MISP server, but I didn't quite finish it because my ma
 
 I'm running Windows 11 on a Dell Latitude 5410 with 32GB of RAM, a 512GB SSD, and an Intel Core i7-10610U processor.
 
-### Setting up
+### Setting up Member Device
 
-The first step is getting all of the software we need to run the server - That would be a Virtual Machine (VM) to run another Operating System (OS) on, and Linux Ubuntu OS to run the server on. I could run it on my laptop without the VM, but that would require me to delete Windows and solely run Linux - IT's not necessary, this situation doesn't exactly call for it, and I just don't feel like doing all of that to be completely honest. That's another project for another day.
+The first step is getting all of the software we need to run the MEmber device - That would be a Virtual Machine (VM) to run another Operating System (OS) on, which is going to be Linux Ubuntu. I could run it on my laptop without the VM, but that would require me to delete Windows and solely run Linux - It's not necessary, this situation doesn't exactly call for it, and I just don't feel like doing all of that to be completely honest. That's another project for another day.
 
 **Downloading Ubuntu**
 
@@ -84,4 +84,143 @@ Name the computer, name the user, give it a password, all that good stuff and we
 
 **SUCCESS**
 
-The install went perfect this time and we have a restarted VM with Ubuntu on it. When it asks to delete the installation medium ignore that, it's a carry over from the days of CD-ROMs apparently and is saying to remove the "disc" from the "tray" so it doesn't boot from the installer again, but since we're doing this from the virtyalbox, it should know not to do that, so we'll be fine.
+The install went perfect this time and we have a restarted VM with Ubuntu on it. When it asks to delete the installation medium ignore that, it's a carry over from the days of CD-ROMs apparently and is saying to remove the "disc" from the "tray" so it doesn't boot from the installer again, but since we're doing this from the virtualbox, it should know not to do that, so we'll be fine.
+
+We're now at the final stages of setup - The first thing it asks is if we want to enable Ubuntu pro. While it is ideal, especially for enterprise environments and DoD environments, we'll skip it to have the most plain system possible, showing us where all the vulnerabilities are and patching/managing them as we learn about them. IT can also be turned on later so no sweat.
+
+**Setting up Apps**
+
+Here's where we want to add the apps we'll be using and need access to, cybersecurity focused. The first 3 apps are going to be Nmap (Network Mapper), Wireshark (Packet Analyzer) and VSCode (Remote-SSH) - Nmap to discover the server and see what ports are open, Wireshark to watch the traffic between the member and the server (We can see if passwords are sent in plaintext here), and VS code to be able to write code on the Member Desktop VM that will be deployed on the Server VM.
+
+Nmap worked beautifully - Wireshark shows as a Debian package, and VSCode just doesn't show up at all, so we'll have to work around this. For context and simplicity, Debian is a Linux distribution that Ubuntu is essentially built on top of to provide ease of use. So technically it should be able to use it, we'll just have to install it from the Terminal.
+
+Apparently it's a common issue so it shouldn't be hard to get past. The new app center prioritizes "Snap" packages - universal application bundles that include all dependencies, making them easy to install. They sometimes struggle with .deb files, or Ubuntu lacks the permission prompt to install these, which is why we have to install from the Terminal.
+
+**Into the Terminal**
+
+Ctrl+Alt+T brings up the Terminal in Linux - From here, we're using Bash Script. I'll give the play by play while we're doing it:
+
+**Update available software**
+
+sudo apt update
+
+sudo: "SuperUser Do." This tells Linux to run the command with Administrator (Root) privileges. Without this, you cannot install software or change system settings.
+
+apt: "Advanced Package Tool." This is the program Ubuntu uses to manage software (install, delete, update - Choose your adventure).
+
+update: The specific action you want to perform - **This does not update your software.** It updates the list of available software. It tells your computer to check the central Ubuntu servers to see what the latest versions of every app are, so when you do install something, you get the newest one.
+
+
+**Wireshark Install/Configuration**
+
+sudo apt install wireshark -y
+
+So now we know the beginning is telling linux to use Superuser privileges from the advanced package tool: here's the rest for the second command:
+
+install: The specific action you want apt to perform.
+
+wireshark: The exact name of the package you want to download.
+
+-y: "Yes." Usually, when you install software, Linux pauses and asks, "This will use 50MB of disk space. Do you want to continue? [Y/n]". Adding -y automatically answers "Yes" to that question so the script doesn't stop and wait for you.
+
+
+We're sending these one after another so they should be separate commands. The update comands updates the list with the other available "applications," and the install command gets us Wireshark.
+
+In this instance, non superusers **should** be able to capture packets, otherwise you would have to run wireshark as root every single time - This is an extreme security risk. root grants unrestricted system privleges. Should an application have a vulnerability or be malicious, whoever gets root access has the keys to the kingdom, and if they're smart they'll be very hard to get out if they're able to be purged at all. In conclusion, non superusers should be able to run wireshark. It allows you to give access to accounts that can be further limited by Identity and Access Management. This means the sudo command would have to be used as it's currently still restricted as an administrator and access is only granted with the password. Remember, my password is more complicated due to me enforcing a strict **password policy** on myself of having several unrelated words, at least 1 number and at least 1 special character. Length matters more than complexity. 
+
+Now that wireshark is added and non superusers can use it, we have to **add this user to the group** using the following code:
+
+sudo usermod -aG wireshark $USER
+
+usermod: "User Modify." The command to change settings for a user account.
+
+-aG: These are two flags combined:
+
+-a (Append): This is critical. It means "Add this user to a group, but keep all their existing groups." (If you forgot the -a and just used -G, it would remove you from every other group, including the 'sudo' group, effectively locking you out of your own computer).
+
+-G (Group): Tells the command that the next word you type will be a Group Name.
+
+wireshark: The name of the specific security group that allows access to the network card.
+
+$USER: This is a "Variable." Linux automatically replaces $USER with your actual username (e.g., Totodile) so you don't have to type it manually.
+
+Now that wireshark group has been created, but normally we would have to log out and log back in to actually see the changes take place. To push the change without a log out:
+
+newgrp wireshark
+
+newgrp: "New Group."
+
+What it does: Normally, when you change your group memberships like before Linux doesn't notice until you log out and log back in. This command forces the current terminal window to refresh its identity and recognize that you are now part of the wireshark group immediately.
+
+Now that the group has been created, we'll want to check and make sure we were added properly. There are 3 ways to do this.
+
+**Current Session Check**
+
+This command is a simple one:
+
+groups
+
+This will show you a list of every group the current user belongs to. as long as wireshark is in that list, we've been added successfully added. If not, something went wrong.
+
+**Official Record Check**
+
+Now if we want to verify that the usermod command worked on the system database. This will work even if the terminal hadn't updated yet:
+
+grep wireshark /etc/group
+
+grep
+This stands for "Global Regular Expression Print." It is essentially the "Ctrl + F" (Find) function for the command line.
+
+You give it a text pattern, and it scans a file line-by-line. If a line contains that pattern, it prints the entire line to your screen. If the pattern isn't found, it stays silent.
+
+wireshark
+In this instance, since grep is like the Ctrl+F, wireshark would be the Search Pattern (or keyword).
+
+This is the specific text string grep is looking for. In this case, we are looking for the group named "wireshark."
+
+/etc/: This directory is the "nervous system" of Linux. It contains all the system-wide configuration files (startup scripts, network configs, password files).
+
+group: This specific file is a plain text database. It defines every single "Group" on the operating system, who belongs to it, and what its ID number is.
+
+It should look something like:
+
+wireshark:x:1001:yourusername. 
+
+Wireshark: The Group Name
+x: the password - the x means the pasword is encrypted stored in a different, more secure file (/etc/gshadow)
+128: The group ID - Linux used numbers, not words to handle permissions
+yourusername: this would be whatever members are included in that list, it's not always just one person.
+
+As long as our name shows up at the end of that line, we're in.
+
+**Real World Test**
+
+This is where we open the application in the GUI/Desktop and test it from the app menu. You can also do it from the terminal.
+
+Clicking show apps and searching for wireshark opens it there. To open it from the Terminal:
+
+You should e able to see a list of network adapters like enp0s3, eth0, or loopback with hearbeat rhythms to the right of them. They may take a second to show - if you see "no interfaces found" or the list is empty, it was a failure and something went wrong adding the user to the group. 
+
+**VSCode Install**
+
+Wireshark and Nmap are downloaded, now it's time to make sure we have VSCode. To install, we'll run the following bash command:
+
+sudo snap install code --classic
+
+sudo: "Run as Administrator."
+
+snap: This calls the Snap Package Manager (instead of apt).
+
+install code: "Find the package named 'code' (which is VS Code) and install it."
+
+--classic: This is the most important part.
+
+By default, Snap apps are "sandboxed"—they live in a bubble and can't touch your other files (for security).
+
+However, VS Code is a code editor; it needs to read your files, open scripts, and run compilers elsewhere on your drive.
+
+The --classic flag tells Ubuntu: "Burst the security bubble for this one app. Let it access the whole hard drive just like a normal 'classic' program."
+
+The download should start running from the terminal there, a few minutes later you should have VSCode in that VM.
+
+We've added apps by the GUI and the Terminal now, and our member 
