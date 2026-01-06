@@ -287,3 +287,7 @@ Since there is no moue or keyboard attached, we control it remotely from another
 In this project, once we have it all put together, we'll leave the server running in the background and use SSH to make the changes we need.
 
 After this we finish up, name the server - I'm naming this one Feraligatr to keep it consistent (IYKYK). 
+
+**Sidenote**
+
+We're skipping Ubuntu Pro again here, but keep in mind that that's going to be essential for government deployments as it helps with FedRAMP, FIPS, STIG, HIPAA and other compliance requirements. IF you're working professionally, make sure you know what Framework you work under so you can make sure your devices are optimized for compliance.
