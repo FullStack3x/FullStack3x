@@ -291,3 +291,13 @@ After this we finish up, name the server - I'm naming this one Feraligatr to kee
 **Sidenote**
 
 We're skipping Ubuntu Pro again here, but keep in mind that that's going to be essential for government deployments as it helps with FedRAMP, FIPS, STIG, HIPAA and other compliance requirements. IF you're working professionally, make sure you know what Framework you work under so you can make sure your devices are optimized for compliance.
+
+**SSH Configuration**
+
+Like we said before, we'll need Open SSH to be able to remote in and control it, otherwise we'll have to click into the window the server is on everytime and type commands instead for efficiency. Hit spacebar here to insert an X, don't import any keys, navigate to Done and hit enter.
+
+**Featured Server Snaps**
+
+We want a clean install so we won't add anything in here - We will use Docker and Powershell, but we'll get those configured later so we know how to set them up.
+
+After that, install starts and we're on our way to having a server stood up for us to setup and work with. This should take like 5-10 minutes, then it will ask you to reboot, go head. When a stream of error messages hit saying to remove the installation medium, just hit enter and VirtualBox will do it for you again. After that, a bunch of text with green [OK] messages should roll by, and stop at a screen that tells you to login. Login and voila, a server is born.
