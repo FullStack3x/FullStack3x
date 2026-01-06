@@ -255,3 +255,35 @@ I downloaded Ubuntu Server [here](https://ubuntu.com/download/server)
 This version comes without the GUI installed - Saving RAM - and is pre-installed with server Grade Kernels.
 
 **Creating A Virtual Machine**
+
+We'll just make sure to name this one a Server to make sure it's clearly distinguished from the Member Device, simply select the server ISO image, 2GB is fine for the server wince it won't have the GUI and other software, 1 CPU is fine to run, 2 CPUs is fine to make sure it runs smoothly. We're running 1 device on it so it shouldn't need to be very heavy at all. The standard 25GB of disk space works as well.
+
+Without a GUI, the mouse isn't going to work here so we'll be navigating using the arrow keys primarily.
+
+This is pretty simple - initially it asks for your language and the keyboard layout
+
+After those, it asks about the base for the installation. Defaul server is recommended - The minimized server is primarily used for Cloud Deployments where space is crucial and every MB costs money and you're trying to minimize the attack surface - I'll be revisiting that in a later project. You would have to add a lot of things typical Security Engineers/Administrators would need, to keep it simple we'll do a simple install. Third party drivers in this case refers  primarily to physical hardware.
+
+**Network Configuration**
+
+For Network Configuration, it should show enp0s3 getting an IP address via DHCP. This is networking 101 if you don't know so so pay attention:
+
+enp0s3 is the name of your network card. Older versions may show eth0, but they're the same thing. In Windows, you would se "Wi-Fi" or "Ethernet Adapter" - Linux uses codes for these things. Linux and Windows don't manage their files the same way so it's going to be an adjustment if you aren't used to seeing things that way, we'll go through file management later.
+
+DHCP is the **Dynamic Hosting Configuration Protocol.** The DHCP In short, we're allowing DHCP to give the server an IP address automatically for now because we need access to the internet somehow. The DHCP automatically applies an IP address within a network to a device connecting to it - kind of like when you walk into a fancy restaraunt and they seat you at a specific table number so the right food and drinks get to you. The thing is, this table number can change day to day, and a server should have the same number everytime so devices don't have issues pulling from those resources. If the location changes everyday, nothing would work consistently and managing a network like that leads to a lot of downtime to manage IP locations.
+
+We need to finish downloading security packages and updates, this is the simplest way from the beginning. We'll secure it a little more, give it a Static IP address and explain a little more later.
+
+Hit enter for Proxy configuration - normally in enterprose environments, employee would need to go through a proxy server for security scanning, we're not doing that right now since this will be on a home network. For the mirror, that's the web address where your server would download updates and apps from - this will also be blank since we don't have an alternative we know we should use that would be faster or has other resources we need.
+
+**Storage configuration**
+
+As fas as Guided Storage Configuration goes, keep the default settings. Using the hard drive is the same thing as the Desktop install - taking the 25GB we set aside for the VM to create necessary partitions. Keep setup as LVM group checked as well - LVM is a Logical Volume Manager. Basically, if we fill the server up in 6 months, we would have to back everything up and remove it to create more space. With this, we can create a second virtual drive in VirtualBox and glue it to the old drive while the server is running, allowing us to continue working. Encrypting the LVM with LUKS would force us to enter a password everytime the server reboots to get it to turn on, and this is annoying for the headless server we're making. A headless server is just a server that operates without a mouse, keyboard, or GUI. This would be one of the servers on the racks in a data center where we host services. 
+
+In the professional world, almost all servers are headless. Drwing windows and animating mouse cursors - things that are done in a GUI - take up CPU and RAM, servers are optimized to use computing power mainly for whatever the server is uesed for. Whether that's hosting a website or cracking passwords, you want the most powerful device possible here dedicating hardware and software resources as close to 100% as possible. GUIs also require a lot of complex code for different applications like music players, browsers, even font managers - extending the attack surface. All vulnerabilities we have to account for. Finally, to keep the server stable, it needs as little chances of crashing as possible. GUIs crash and stall a lot more than headless servers - These can often run for years without ever needing a reboot.
+
+Since there is no moue or keyboard attached, we control it remotely from another computer using a Secure Shell, or SSH - We'll open a command line on the member device, type a command to connect to the server and control it from there. as long as it's connected somewhere in the network and we have permissions, we should be able to reach it. this is where **VSCode** comes into play.
+
+In this project, once we have it all put together, we'll leave the server running in the background and use SSH to make the changes we need.
+
+After this we finish up, name the server - I'm naming this one Feraligatr to keep it consistent (IYKYK). 
