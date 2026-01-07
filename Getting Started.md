@@ -4,13 +4,13 @@ I ended up standing up a MISP server, but I didn't quite finish it because my ma
 
 I'm running Windows 11 on a Dell Latitude 5410 with 32GB of RAM, a 512GB SSD, and an Intel Core i7-10610U processor.
 
-### Gathering the Materials
+### Looting for Materials
 
 The first step is getting all of the software we need to run both the Member device and the server through - That would be a Virtual Machine (VM) to run another Operating System (OS) on, which is going to be Linux Ubuntu. I could run it on my laptop without the VM, but that would require me to delete Windows and solely run Linux - It's not necessary, this situation doesn't exactly call for it, and I just don't feel like doing all of that to be completely honest. That's another project for another day.
 
 We'll be creating two VMs for this since we'll be simulating one device communicating with another.
 
-**Downloading the Virtual Machine**
+**Downloading the Hypervisor**
 
 This is where I was running into the most frustration in the beginning, you'll see why soon. So Downloading the VirtualBox is easy enough, getting it to run was a little tricky, I just needed to do a little searching on some forums to find out how to get it going. The thing is, my computer was new - like not even a month old new when I started doing this, so I didn't have Python on my computer yet to be able to make it work. The VirtualBox needs the Python Core & win32api bindings because the VirtualBox has a Python API that allows external Python scripts to manage and automate VMs on Windows hosts. 
 
@@ -30,15 +30,15 @@ py -m pip install --upgrade pip
 
 So now we're at the point where I have to actually create the VM that Ubuntu is going to run on. This distribution is going to be for the member device as the VM setup will be different for each of our devices.
 
-**Downloading Ubuntu**
+**Ubuntu**
 
 I'm working on Ubuntu 24.04.3 LTS. There is a newer version available right now - Ubuntu 25.10 - the LTS is the most reliable version to have for servers and workstations as it offers stability, security, and 5+ years of updates. The newer versions only offer 9 months of support and require more frequent updates so they're good for trying out the newest features and for people who are comfortable with making updates that frequently, just depends on what your purpose is. Mine is to build a server and use it for something down the line, I just dont know exactly what it will be yet, I think LTS is good to start since it will be lower maintenance.
 
 I downloaded it from [here](https://ubuntu.com/download/desktop)
 
-**Creating a Virtual Machine**
+**Building a Virtual Machine**
 
-The Virtual Machine in itself is a vehicle to run the second OS in without having to swap the base Windows 11 OS I'm using. Think about it as a holster - without one, you can only carry one weapon (Windows 11). When you equip yourself with the holster (Virtual Machine), you can now carry another weapon (Ubuntu) to switch to for a different situation. Two VMs, 3 total weapons to use.
+The Virtual Machine in itself is a vehicle to run the second OS in without having to swap the base Windows 11 OS I'm using. Think about it as a holster - without one, you can only carry one weapon (Windows 11). When you equip yourself with the  holster (Virtual Machine), you can now carry another weapon (Ubuntu) to switch to for a different situation. Two VMs, 3 total weapons to use.
 
 We're at the point where I have to actually create the VM that Ubuntu is going to run on. The Virtual Machine in itself is a vehicle to run the second OS in without having to swap the base Windows 11 OS I'm using. Think about it as a holster - without one, you can only carry one weapon (Windows 11). When you equip yourself with the holster (Virtual Machine), you can now carry another weapon (Ubuntu) to switch to for a different situation. 
 
@@ -46,11 +46,11 @@ When I select new, It'll ask me to name it - It feels like my first Pokemon so I
 
 **Selecting the Disk File**
 
-Back to the important stuff: Selecting an ISO Image is key here - An ISO Image is a .iso file - a digital replica of a CD or DVD that serves as a software installer. A.K.A. the file that holds the operating system we want to run in the VM. in this case, the download we got from the Ubuntu site is going to be the .iso file we need to import.
+Back to the important stuff: Selecting an ISO Image is key here - An ISO Image is a .iso file - a digital replica of a CD or DVD that serves as a software installer. A.K.A. the file that holds the operating system we want to run in the VM. In this case, the download we got from the Ubuntu site is going to be the .iso file we need to import.
 
 **Password Security: VVVImportant**
 
-After making sure we include that file and make sure the dropdowns below are correctly aligned with the version we need, the next page basically asks for the password you want to use - create one and move along. For best practices, I make sure to apply entrophy over complexity and add length to the passwords. When I was studying for the Intro to Cybersecurity Certification with ISC(2) a while back, one of the things I really gained from that was knowledge about how encryption works. Namely, when an attacker is using a password cracker to try and gain access to an account, the longer the password is the longer amount of time it takes to try and get into an account, making it considerably harder to get hacked unless you just give the password up. I would use 1Password or something like that with a compilation of random words and some symbols to make it more secure and then randomize the rest of the passords based on that same principle.
+After making sure we include that file and make sure the dropdowns below that are correctly aligned with the version we need, the next page basically asks for the password you want to use - create one and move along. For best practices, I make sure to apply entrophy over complexity and add length to the passwords. When I was studying for the Intro to Cybersecurity Certification with ISC(2) a while back, one of the things I really gained from that was knowledge about how encryption works. Namely, when an attacker is using a password cracker to try and gain access to an account, the longer the password is the longer amount of time it takes to try and get into an account, making it considerably harder to get hacked unless you just give the password up. I would use 1Password or something like that with a compilation of random words and some symbols to make it more secure and then randomize the rest of the passords based on that same principle.
 
 **Sidebar: Cryptography**
 
@@ -84,7 +84,7 @@ _"The log snippet you provided shows the installation failing (or hanging) exact
 
 In VirtualBox 7.x with Ubuntu 24.04, this is almost always caused by a feature called "Unattended Installation."_
 
-So, we repeat the steps from earlier and go through with the install. You should have  an ubuntu bootstrap as well, when it asks you to update ubuntu and you should do so. This one is the ubuntu-desktop-bootstrap - basically it uses Linux's installer backend, Subiquity, to push the setup along, and Flutter - A Google open source UI SDK used to create the GUI for Linux. 
+So, we repeat the steps from earlier to go through with the install. You  should have  an ubuntu bootstrap as well, when it asks you to update ubuntu and you should do so. This one is the ubuntu-desktop-bootstrap - basically it uses Linux's installer backend, Subiquity, to push the setup along, and Flutter - A Google open source UI SDK used to create the GUI for Linux. 
 
 The Ubuntu bootstrap is what's going to make this the member device, since it needs the GUI. The Server VM is going to be completely run from the Terminal, but we'll get into that later.
 
